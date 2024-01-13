@@ -8,4 +8,12 @@ const pokeApi = () => {
                 .catch(error => console.log(error))
 }
 
-export { pokeApi }
+const getPokemonDetail = (url) => {
+    return axios.get(`https://pokeapi.co/api/v2/pokemon/${url}`)
+                .then(response => {
+                    return response.data
+                })
+                .catch(error => console.log(error))
+}
+
+export { pokeApi, getPokemonDetail }

@@ -4,8 +4,16 @@ const PockemonList = ({ pokemon }) => {
     return(
         <div className="grid grid-cols-4 gap-4 py-8 justify-items-center">
             {
-                pokemon.map((element,index) => {
-                    return <PockemonCard key={index} data={element}/>
+                pokemon.map(element => {
+                    return <PockemonCard 
+                    key={element.id} 
+                    data={element} 
+                    image={element.sprites.front_default} 
+                    name={element.name} 
+                    types={element.types} 
+                    id={element.id}
+                    favorite={element.favorite}
+                    />
                 })
             }
         </div>

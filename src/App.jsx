@@ -1,27 +1,24 @@
 
 // Redux con Hooks
-
+import { Spin } from 'antd'
 import { Col } from 'antd'
 import { Search } from './Components/Search'
 import { PockemonList } from './Components/PockemonList'
 import logo from './Statics/logo.svg'
 import { useEffect } from 'react'
-import { pokeApi } from './api/pokeAPI'
-import { setPokemons } from './actions'
 import './App.css'
-import { useDispatch, useSelector } from 'react-redux'
+import { shallowEqual, useDispatch, useSelector } from 'react-redux'
+import { fetchPokemonWithDetails } from './slices/dataSlice'
 
-
+//shallow equal para comparar valores cuando trabajamos con arreglos inmutables u objetos
 
 function App() {
-  const pokemon = useSelector(state => state.pokemon)
+  const pokemon = useSelector(state => state.data.pokemon, shallowEqual)
+  const loading = useSelector(state => state.ui.loading)
   const dispatch = useDispatch();
+
   useEffect(() => {
-    const fetchPokemon = async () => {
-      const pokemonList = await pokeApi()
-      dispatch(setPokemons(pokemonList))
-    }
-    fetchPokemon()
+    dispatch(fetchPokemonWithDetails())
   }, [])
   return (
     <main className='mt-6 px-8 w-screen'>
@@ -31,7 +28,16 @@ function App() {
     <Col span={8} offset={8}>
       <Search/>
     </Col>
-    <PockemonList pokemon={pokemon}/>
+    {
+      loading &&
+      <Col offset={12}>
+        <Spin spinning size='large' className='py-4'/>
+      </Col>
+    }
+    {
+      !loading &&
+      <PockemonList pokemon={pokemon}/>
+    }
     </main>
   )
 }
@@ -39,6 +45,7 @@ function App() {
 export default App
 
 // Redux con connect
+
 // import { Col } from 'antd'
 // import { Search } from './Components/Search'
 // import { PockemonList } from './Components/PockemonList'

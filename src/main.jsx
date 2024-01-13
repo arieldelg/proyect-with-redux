@@ -2,16 +2,19 @@ import React from 'react'
 import ReactDOM from 'react-dom/client'
 import App from './App.jsx'
 import './index.css'
-import { pokemonReducer } from './reducers/pokemon.jsx'
 import { Provider } from 'react-redux'
 import { legacy_createStore as createStore } from 'redux'
-import { featuring, firstName, logger } from './middlewares/index.jsx'
+import { logger } from './middlewares/index.jsx'
 import { compose } from 'redux'
 import { applyMiddleware } from 'redux'
+import { thunk } from 'redux-thunk'
+import { rootReducer } from './reducers/rootReducer.jsx'
 
-const composedEnchancers = compose(window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__(), applyMiddleware(logger, featuring, firstName))
+const conmposeAlt = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose //linea de codigo cuando se utiliza redux thunk
 
-const store = createStore(pokemonReducer, composedEnchancers)
+const composedEnchancers = conmposeAlt(applyMiddleware( thunk, logger))
+
+const store = createStore(rootReducer, composedEnchancers)
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
